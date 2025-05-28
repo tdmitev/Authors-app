@@ -1,32 +1,40 @@
+using Microsoft.EntityFrameworkCore;
+using SportScore2.Api.Data;
 using SportScore2.Api.Models;
 
 namespace SportScore2.Api.Repositories;
 
 public class AuthorRepository : IAuthorRepository
 {
-    private readonly List<Author> _authors = new();
+    private readonly AppDbContext _ctx;
 
-    public Task<IEnumerable<Author>> GetAllAsync() =>
-        Task.FromResult(_authors.AsEnumerable());
+    public AuthorRepository(AppDbContext ctx) => _ctx = ctx;
 
-    public Task<Author?> GetByIdAsync(Guid authorId) =>
-        Task.FromResult(_authors.FirstOrDefault(a => a.Id == authorId));
+    public async Task<IEnumerable<Author>> GetAllAsync() =>
+        await _ctx.Authors.AsNoTracking().ToListAsync();
 
-    public Task AddAsync(Author author)
+    public async Task<Author?> GetByIdAsync(Guid authorId) =>
+        await _ctx.Authors.FindAsync(authorId);
+
+    public async Task AddAsync(Author author)
     {
-        _authors.Add(author);
-        return Task.CompletedTask;
+        _ctx.Authors.Add(author);
+        await _ctx.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(Author author)
+    public async Task UpdateAsync(Author author)
     {
-        return Task.CompletedTask;
+        // _ctx.Authors.Update(author); // по желание
+        await _ctx.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(Guid authorId)
+    public async Task DeleteAsync(Guid authorId)
     {
-        var a = _authors.FirstOrDefault(x => x.Id == authorId);
-        if (a != null) _authors.Remove(a);
-        return Task.CompletedTask;
+        var entity = await _ctx.Authors.FindAsync(authorId);
+        if (entity != null)
+        {
+            _ctx.Authors.Remove(entity);
+            await _ctx.SaveChangesAsync();
+        }
     }
 }

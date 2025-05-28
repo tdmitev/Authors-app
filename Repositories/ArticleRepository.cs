@@ -1,43 +1,53 @@
+using Microsoft.EntityFrameworkCore;
+using SportScore2.Api.Data;
 using SportScore2.Api.Models;
 
 namespace SportScore2.Api.Repositories;
 
 public class ArticleRepository : IArticleRepository
 {
-    private readonly List<Article> _articles = new();
+    private readonly AppDbContext _ctx;
+
+    public ArticleRepository(AppDbContext ctx) => _ctx = ctx;
 
     public Task<bool> AuthorExistsAsync(Guid authorId) =>
-        Task.FromResult(true);
+        _ctx.Authors.AnyAsync(a => a.Id == authorId);
 
-    public Task<IEnumerable<Article>> GetArticlesByAuthorAsync(
+    public async Task<IEnumerable<Article>> GetArticlesByAuthorAsync(
         Guid authorId, int pageNumber, int pageSize) =>
-        Task.FromResult(_articles
+        await _ctx.Articles
             .Where(a => a.AuthorId == authorId)
+            .OrderBy(a => a.Published)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .AsEnumerable());
+            .AsNoTracking()
+            .ToListAsync();
 
-    public Task<Article?> GetByIdAsync(Guid authorId, Guid articleId) =>
-        Task.FromResult(_articles
-            .FirstOrDefault(a => a.AuthorId == authorId && a.Id == articleId));
+    public async Task<Article?> GetByIdAsync(Guid authorId, Guid articleId) =>
+        await _ctx.Articles
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.AuthorId == authorId && a.Id == articleId);
 
-    public Task AddAsync(Article article)
+    public async Task AddAsync(Article article)
     {
-        _articles.Add(article);
-        return Task.CompletedTask;
+        _ctx.Articles.Add(article);
+        await _ctx.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(Article article)
+    public async Task UpdateAsync(Article article)
     {
-        // In-memory
-        return Task.CompletedTask;
+        _ctx.Articles.Update(article);
+        await _ctx.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(Guid authorId, Guid articleId)
+    public async Task DeleteAsync(Guid authorId, Guid articleId)
     {
-        var art = _articles.FirstOrDefault(a =>
-            a.AuthorId == authorId && a.Id == articleId);
-        if (art != null) _articles.Remove(art);
-        return Task.CompletedTask;
+        var art = await _ctx.Articles
+            .FirstOrDefaultAsync(a => a.AuthorId == authorId && a.Id == articleId);
+        if (art != null)
+        {
+            _ctx.Articles.Remove(art);
+            await _ctx.SaveChangesAsync();
+        }
     }
 }

@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using SportScore2.Api.Data;
 using SportScore2.Api.Exception;
 using SportScore2.Api.Filters;
 using SportScore2.Api.Mappers;
@@ -6,29 +9,34 @@ using SportScore2.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Suppress default ModelState invalid filter
-builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
+// 1. Suppress default ModelState invalid filter
+builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
 
-// Swagger/OpenAPI
+// 2. Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// AutoMapper
+// 3. AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
-// Memory cache
+// 4. Memory cache
 builder.Services.AddMemoryCache();
 
-// DI: репозитории и услуги
-builder.Services.AddSingleton<IAuthorRepository, AuthorRepository>();
-builder.Services.AddSingleton<IArticleRepository, ArticleRepository>();
-builder.Services.AddSingleton<IAuthorService, AuthorService>();
-builder.Services.AddSingleton<IArticleService, ArticleService>();
+// 5. EF Core DbContext (MySQL)
+var conn = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(conn, ServerVersion.AutoDetect(conn)));
 
-// Валидационен филтър
+// 6. DI: репозитории и услуги като Scoped
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
+
+// 7. Validation filter
 builder.Services.AddSingleton<ValidationFilter>();
 builder.Services.AddControllers(options =>
 {
@@ -37,14 +45,14 @@ builder.Services.AddControllers(options =>
 
 var app = builder.Build();
 
-// Swagger UI
+// 8. Swagger UI
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Глобални exception-и
+// 9. Глобални exception-и
 app.UseMiddleware<ExceptionMiddleware>();
 
-// Мапваме само контролерите
+// 10. Map controllers
 app.MapControllers();
 
 app.Run();
