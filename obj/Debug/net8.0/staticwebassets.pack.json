@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/td_mitev/RiderProjects/Project/SportScore2.Api/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.SportScore2.Api.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.SportScore2.Api.props",
+      "PackagePath": "build\\SportScore2.Api.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.SportScore2.Api.props",
+      "PackagePath": "buildMultiTargeting\\SportScore2.Api.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.SportScore2.Api.props",
+      "PackagePath": "buildTransitive\\SportScore2.Api.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

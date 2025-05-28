@@ -45,9 +45,17 @@ builder.Services.AddControllers(options =>
 
 var app = builder.Build();
 
-// 8. Swagger UI
+// ➤ Serve wwwroot/index.html
+app.UseDefaultFiles();    // търси index.html
+app.UseStaticFiles();     // serve-ва файловете от wwwroot
+
+// 8. Swagger UI на алтернативен маршрут (/swagger)
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SportScore2 API V1");
+    c.RoutePrefix = "swagger"; // вече няма да е на корена
+});
 
 // 9. Глобални exception-и
 app.UseMiddleware<ExceptionMiddleware>();

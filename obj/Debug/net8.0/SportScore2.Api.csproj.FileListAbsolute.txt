@@ -145,3 +145,4 @@
 /Users/td_mitev/RiderProjects/Project/SportScore2.Api/obj/Debug/net8.0/SportScore2.Api.pdb
 /Users/td_mitev/RiderProjects/Project/SportScore2.Api/obj/Debug/net8.0/SportScore2.Api.genruntimeconfig.cache
 /Users/td_mitev/RiderProjects/Project/SportScore2.Api/obj/Debug/net8.0/ref/SportScore2.Api.dll
+/Users/td_mitev/RiderProjects/Project/SportScore2.Api/bin/Debug/net8.0/SportScore2.Api.staticwebassets.runtime.json

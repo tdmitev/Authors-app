@@ -67,6 +67,9 @@ namespace SportScore2.Api.Services;
             var model = _mapper.Map<Article>(dto);
             model.AuthorId = authorId;
             await _repo.AddAsync(model);
+            
+            _cache.Remove($"A:{authorId}:1:10");
+
             return _mapper.Map<ArticleDto>(model);
         }
 
@@ -74,16 +77,21 @@ namespace SportScore2.Api.Services;
             Guid authorId, Guid articleId, UpdateArticleDto dto)
         {
             var existing = await _repo.GetByIdAsync(authorId, articleId)
-                ?? throw new NotFoundException($"Article {articleId} not found.");
+                           ?? throw new NotFoundException($"Article {articleId} not found.");
             _mapper.Map(dto, existing);
             await _repo.UpdateAsync(existing);
+            
+            _cache.Remove($"A:{authorId}:1:10");
+
             return _mapper.Map<ArticleDto>(existing);
         }
 
         public async Task DeleteAsync(Guid authorId, Guid articleId)
         {
             var existing = await _repo.GetByIdAsync(authorId, articleId)
-                ?? throw new NotFoundException($"Article {articleId} not found.");
+                           ?? throw new NotFoundException($"Article {articleId} not found.");
             await _repo.DeleteAsync(authorId, articleId);
+            
+            _cache.Remove($"A:{authorId}:1:10");
         }
     }

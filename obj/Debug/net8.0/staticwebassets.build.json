@@ -1,11 +1,39 @@
 {
   "Version": 1,
-  "Hash": "C77HEJzF3LJhYSsPI44rCt144QNZZqHi8wJro84KGcw=",
+  "Hash": "c4YXVVuDRCERJzq2e2urYLILU302qOGHkzFAY32baUw=",
   "Source": "SportScore2.Api",
   "BasePath": "_content/SportScore2.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "SportScore2.Api/wwwroot",
+      "Source": "SportScore2.Api",
+      "ContentRoot": "/Users/td_mitev/RiderProjects/Project/SportScore2.Api/wwwroot/",
+      "BasePath": "_content/SportScore2.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/td_mitev/RiderProjects/Project/SportScore2.Api/wwwroot/index.html",
+      "SourceId": "SportScore2.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/td_mitev/RiderProjects/Project/SportScore2.Api/wwwroot/",
+      "BasePath": "_content/SportScore2.Api",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    }
+  ]
 }
